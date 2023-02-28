@@ -2,7 +2,7 @@
 import { openDB } from 'idb';
 
 // TODO: Complete the initDb() function below:
-const initdb = async () => {
+const initdb = async () => 
     openDB('contact', 1, {
         upgrade(db) {
           if (db.objectStoreNames.contains('contact')) {
@@ -13,7 +13,7 @@ const initdb = async () => {
           console.log('contact database created');
         },
       });
-};
+
 
 
 // TODO: Complete the postDb() function below:
@@ -22,14 +22,9 @@ export const postDb = async (name, home, cell, email)  => {
     const contactDb = await openDB('contact', 1);
     const tx = contactDb.transaction('contact', 'readwrite');
     const store = tx.objectStore('contact');
-    const request = store.add([
-        { contact: name },
-        { contact: home },
-        { contact: cell },
-        { contact: email }
-    ]);
+    const request = store.add({ name: name , home_phone: home , cell_phone: cell,  email: email });
     const result = await request;
-    console.log('🚀 - data saved to the database', result);
+    console.log('🚀 - data saved to the database', result, request);
 };
 
 // TODO: Complete the getDb() function below:
@@ -48,7 +43,7 @@ export const getDb = async () => {
 export const deleteDb = async (id) => {
     console.log('DELETE from the database', id);
   const contactDb = await openDB('contact', 1);
-  const tx = contactDb.transaction('contact', 'readonly');
+  const tx = contactDb.transaction('contact', 'readwrite');
   const store = tx.objectStore('contact');
   const request = store.delete(id);
   const result = await request;
